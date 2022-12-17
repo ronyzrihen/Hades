@@ -14,16 +14,7 @@ Room::Room()
 	m_West(NULL)
 {}
 
-Room::Room(Room& source) :
-num_of_item(source.num_of_item),
-num_of_monster(source.num_of_monster),
-m_name(source.m_name),
-m_item(new Item[source.num_of_item]),
-m_monster(new Monster[source.num_of_monster]),
-m_North(source.m_North),
-m_South(source.m_South),
-m_East(source.m_East),
-m_West(source.m_West)
+Room::Room(Room& source)
 {
 	for (int i = 0; i < num_of_item; i++) {
 		m_item[i] = source.m_item[i];
@@ -31,13 +22,17 @@ m_West(source.m_West)
 	for (int i = 0; i < num_of_monster; i++) {
 		m_monster[i] = source.m_monster[i];
 	}
+    m_name = source.m_name;
+    num_of_item = source.num_of_item;
+    num_of_monster = source.num_of_monster;
 
-	if (source.m_North == NULL)
-		return;
+    m_North = copy_rooms(source.m_North);
+    m_South = copy_rooms(source.m_South);
+    m_West = copy_rooms(source.m_West);
+    m_East = copy_rooms(source.m_East);
 
-	if (source.m_North != NULL) {
-		m_North = Room(source.m_North);
-	}
+
+
 }
 
 Room& Room:: operator=(Room& source) {
@@ -50,14 +45,13 @@ Room& Room:: operator=(Room& source) {
 			m_item[i] = source.m_item[i];
 	}
 	else {
-		delete[]m_item;
+        delete[]m_item;
 
-		m_item = new Item[source.num_of_item];
-		for (int i = 0; i < source.num_of_item; i++)
-		{
-			m_item[i] = source.m_item[i];
-		}
-
+        m_item = new Item[source.num_of_item];
+        for (int i = 0; i < source.num_of_item; i++) {
+            m_item[i] = source.m_item[i];
+        }
+    }
 		if (num_of_monster == source.num_of_monster) {
 
 			for (int i = 0; i < num_of_monster; i++)
@@ -75,26 +69,25 @@ Room& Room:: operator=(Room& source) {
 		}
 	
 		m_name = source.m_name;
+        num_of_item = source.num_of_item;
+        num_of_monster = source.num_of_item;
+        visited = false;
 
-		delete[] m_North;
-		m_North = new Room(*(source.m_North));
 
-		delete[] m_South;
-		m_South = new Room(*(source.m_South));
+        m_North = delete_room(*m_North);
+        m_North = copy_rooms(source.m_North);
+        m_West = delete_room(*m_West);
+        m_West = copy_rooms(source.m_West);
+        m_East = delete_room(*m_East);
+        m_East = copy_rooms(source.m_East);
+        m_South = delete_room(*m_South);
+        m_South = copy_rooms(source.m_South);
 
-		delete[] m_East;
-		m_East = new Room(*(source.m_East));
+    }
 
-		delete[] m_West;
-		m_West = new Room(*(source.m_West));
+	bool Room::Add_Room(Room * source, direction direction){
 
-		num_of_item = source.num_of_item;
-		num_of_monster = source.num_of_item;
-	}
-}
-	bool Room::Add_Room(Room & source, direction direction){
-
-		if (find_room(source) != NULL) {
+		if (find_room(source->get_name()) != NULL) {
 			cout << "Room Already exist\n";
 			return false;
 		}
@@ -107,7 +100,7 @@ Room& Room:: operator=(Room& source) {
 				cout << "Room is taken\n";
 				return false;
 			}
-			m_North = new Room(source);
+			m_North = source;
 			m_North->m_South = this;
 
 
@@ -119,7 +112,7 @@ Room& Room:: operator=(Room& source) {
 				cout << "Room is taken\n";
 				return false;
 			}
-			m_South = new Room(source);
+			m_South = source;
 			m_South->m_North = this;
 			break;
 		}
@@ -128,7 +121,7 @@ Room& Room:: operator=(Room& source) {
 				cout << "Room is taken\n";
 				return false;
 			}
-			m_East = new Room(source);
+			m_East = source;
 			m_East->m_West = this;
 			break;
 		}
@@ -137,25 +130,33 @@ Room& Room:: operator=(Room& source) {
 				cout << "Room is taken\n";
 				return false;
 			}
-			m_West = new Room(source);
+			m_West = source;
 			m_West->m_East = this;
 			break;
-		}
-			  return true;
+            }
+            default:{
+                cout << "Error!\n";
+                return false;
+            }
 		}///switch
-		
+			  return true;
+
 	}
 
 
-	Room* Room::find_room(Room& room) {
+	Room* Room::find_room(string& room) {
 		Room* North = NULL;
 		Room* South = NULL;
 		Room* East = NULL;
 		Room* West = NULL;
 
+        if(this == NULL)
+            return NULL;
+
 		if (visited == true)
 			return NULL;
-		if (m_name == room.m_name) 
+
+		if (m_name == room)
 			return this;
 		
 		if (m_North != NULL)
@@ -231,10 +232,72 @@ Room& Room:: operator=(Room& source) {
 
 
 
-	Room& Room:: delete_room(Room&room) {
+	Room* Room:: delete_room(Room&room) {
 		if (m_North->m_North == NULL) {
 			
 			return NULL ;
 		}
 
 	}
+
+bool Room::checkroom( direction direction){
+    switch (direction){
+        case north:{
+            if (m_North == NULL)
+                return true;
+            break;
+        }
+        case west:{
+            if (m_West == NULL)
+                return true;
+            break;
+        }
+        case east:{
+            if (m_East == NULL)
+                return true;
+            break;
+        }
+        case south:{
+            if (m_South == NULL)
+                return true;
+            break;
+        }
+        default: {
+            cout << "Invalid direction\n";
+            return false;
+        }
+    }// end of switch
+    return false;
+}
+Room* Room:: move_room(direction direction){
+
+    switch (direction){
+        case north: {
+            if (m_North != NULL)
+                return m_North;
+                break;
+            }
+            case west: {
+                if (m_West != NULL)
+                    return  m_West;
+                break;
+                }
+                case east: {
+                    if (m_East != NULL)
+                        return m_East;
+
+                        break;
+                    }
+                    case south: {
+                        if (m_South != NULL)
+                            return m_South;
+
+                        break;
+                        }
+
+                    }
+                    return this;
+                }
+
+
+

@@ -7,15 +7,19 @@
 class Map
 {
 public:
-	Map(Room& source);
+	Map(Map& source);
 	~Map();
 
 public:
 	Map& operator=(Map& source);
-	Room* copy(Room*& rooms) { return rooms.copy_rooms(rooms); };
+	//todo delete - Room* copy(Room*& rooms) { return rooms->copy_rooms(rooms); };
+    void add_room( Room& room, direction dir );
 private:
 	std::string name;
+	std:: string* room_names;
+    int numberofrooms;
 	Room* rooms;
-	int numberofrooms;
+    Room* curr_room;
+
 };
 
