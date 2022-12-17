@@ -20,6 +20,8 @@ m_rarity(source.m_rarity)
 }
 
 
+
+
 Item& Item:: operator = (Item& source) {
 
 	if (this == &source)
@@ -58,8 +60,8 @@ Item& Item:: operator += (Item& source) {
 Item& Item:: operator ++ () {
 
 	if (m_rarity == legendary)
-		m_rarity = legendary;
-	else
+		return *this;
+	
 	m_rarity++;
 	return *this;
 }
@@ -69,10 +71,8 @@ Item& Item:: operator ++ () {
 Item Item:: operator ++ (int) {
 
 	Item new_item = *this;
-	if (m_rarity == legendary)
-		m_rarity = legendary;
-	else
-		m_rarity++;
+	++(*this);
 
 	return new_item;
 }
+

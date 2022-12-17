@@ -13,14 +13,14 @@ class Item
 public:
 	Item();
 	Item(Item& source);
-	~Item();
+	~Item() { delete[] m_name; };
 
 public:
 	Item& operator = (Item& source);
 	Item& operator += (Item& source);
 	Item operator + (Item& source);
 	Item& operator ++ ();
-	Item operator ++ ();
+	Item operator ++ (int);
 
 
 private:
