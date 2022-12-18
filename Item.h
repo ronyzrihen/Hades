@@ -1,5 +1,7 @@
 #pragma once
-
+#include <iostream>
+#include <string>
+using namespace  std;
 
 typedef enum {
 	common,
@@ -13,9 +15,12 @@ class Item
 public:
 	Item();
 	Item(Item& source);
-	~Item() { delete[] m_name; };
+	~Item() { };
 
 public:
+    string& get_name(){return m_name;};
+    int get_rarity() {return m_rarity;};
+    void set_rarity(Rarity rarity) {m_rarity = rarity;};
 	Item& operator = (Item& source);
 	Item& operator += (Item& source);
 	Item operator + (Item& source);
@@ -24,7 +29,7 @@ public:
 
 
 private:
-	char* m_name;
+	string m_name;
 	int m_rarity;
 };
 

@@ -10,7 +10,7 @@ Monster::Monster()
 
 Monster::Monster(Monster& source)
 	:
-	m_name(_strdup(source.m_name)),
+	m_name(source.m_name),
 	m_level(source.m_level)
 {
 }
@@ -22,7 +22,7 @@ Monster& Monster:: operator=(Monster& source) {
 		return *this;
 
 	delete[] m_name;
-	m_name = _strdup(source.m_name);
+	m_name = source.m_name;
 	m_level = source.m_level;
 	return *this;
 }

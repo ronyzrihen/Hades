@@ -85,6 +85,7 @@ Room& Room:: operator=(Room& source) {
 
     }
 
+
 	bool Room::Add_Room(Room * source, direction direction){
 
 		if (find_room(source->get_name()) != NULL) {
@@ -240,25 +241,26 @@ Room& Room:: operator=(Room& source) {
 
 	}
 
-bool Room::checkroom( direction direction){
+bool Room::check_room( Room& room, direction direction){
     switch (direction){
         case north:{
-            if (m_North == NULL)
+            if (room.check_room(north) == NULL)
+
                 return true;
             break;
         }
         case west:{
-            if (m_West == NULL)
+            if (room.check_room(west) == NULL)
                 return true;
             break;
         }
         case east:{
-            if (m_East == NULL)
+            if  (room.check_room(east) == NULL)
                 return true;
             break;
         }
         case south:{
-            if (m_South == NULL)
+            if (room.check_room(south) == NULL)
                 return true;
             break;
         }
@@ -269,6 +271,38 @@ bool Room::checkroom( direction direction){
     }// end of switch
     return false;
 }
+bool Room::check_room( direction direction) {
+    switch (direction) {
+        case north: {
+            if (m_South == NULL)
+                return true;
+            break;
+        }
+        case west: {
+            if (m_East == NULL)
+                return true;
+            break;
+        }
+        case east: {
+            if (m_West == NULL)
+                return true;
+            break;
+        }
+        case south: {
+            if (m_North == NULL)
+                return true;
+            break;
+        }
+        default: {
+            cout << "Invalid direction\n";
+            return false;
+        }
+    }// end of switch
+    return false;
+}
+
+
+
 Room* Room:: move_room(direction direction){
 
     switch (direction){
@@ -299,5 +333,38 @@ Room* Room:: move_room(direction direction){
                     return this;
                 }
 
+void Room:: add_item(Item& item){
+    Item* new_item_list = NULL;
+    for(int i = 0 ; i <  num_of_item ; i++){
+        if (m_item[i].get_name() == item.get_name()){
+            if(m_item[i].get_rarity() + (item).get_rarity() > legendary){
+                m_item[i] += item;
 
+                new_item_list = new Item[num_of_item+1];
+                for(int i = 0 ; i < num_of_item ; i++){
+                    new_item_list[i] = m_item[i];
+                }
+                new_item_list[num_of_item+1] = item;
+                num_of_item++;
+                delete [] m_item;
+                m_item = new_item_list;
+
+                m_item[num_of_item].set_rarity(common);
+
+                return;
+            }
+            m_item[i] += item;
+            return
+        }
+        new_item_list = new Item[num_of_item+1];
+        for(int i = 0 ; i < num_of_item; i++){
+            new_item_list[i] = m_item[i];
+        }
+        new_item_list[num_of_item+1] = item;
+        num_of_item++;
+        return;
+    }
+
+
+}
 

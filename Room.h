@@ -23,10 +23,30 @@ public:
 	bool Add_Room(Room* source, direction direction );
 	string& get_name() { return m_name; };
 	Room* find_room(string& room);
-	bool checkroom( direction direction);
-	Room* copy_rooms(Room*& room);
+	bool check_room(Room& room, direction direction);
+	bool check_room( direction direction);
+    Room* copy_rooms(Room*& room);
 	Room* delete_room(Room& room);
     Room* move_room(direction direction);
+
+    void set_North(Room& room){*m_North = room;};
+    void set_West(Room& room){*m_West = room;};
+    void set_East(Room& room){*m_East = room;};
+    void set_South(Room& room){*m_South = room;};
+
+    void set_North(Room*& room){m_North = room;};
+    void set_West(Room*& room){m_West = room;};
+    void set_East(Room*& room){m_East = room;};
+    void set_South(Room*& room){m_South = room;};
+
+    void add_item(Item& item);
+
+
+    Room* get_North(){return m_North;};
+    Room* get_West(){return m_West;};
+    Room* get_East(){return m_East;};
+    Room* get_South(){return m_South;};
+
 private:
 	int num_of_item;
 	int num_of_monster;

@@ -12,8 +12,11 @@ public:
 
 public:
 	Map& operator=(Map& source);
+    Map& operator+=(Map& source);
 	//todo delete - Room* copy(Room*& rooms) { return rooms->copy_rooms(rooms); };
     void add_room( Room& room, direction dir );
+    Map operator+(Map& map);
+
 private:
 	std::string name;
 	std:: string* room_names;
