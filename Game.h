@@ -8,18 +8,14 @@
 class Game
 {
 public:
-	Game();
-	~Game();
+	Game():currantmap(NULL){};
+	~Game() { delete currantmap; };
+
+public:
+	void upload_map(string name);
 
 private:
 	Map* currantmap;
 	Data data;
 };
 
-Game::Game()
-{
-}
-
-Game::~Game()
-{
-}

@@ -1,25 +1,27 @@
 #pragma once
 #include "Map.h"
 #include "Room.h"
-
+#include <iostream>
+#include <string>
 
 
 
 class Data
 {
 public:
-	Data();
+	Data() :mapsdata(NULL), roomsData(NULL),mapsize(0),roomsize(0) {};
 	~Data();
 
+public:
+	void add_map(Map& map);
+	void add_room(Room& room);
+	Room* getroom(string name);
+	Map* getmap(string name);
 private:
 	Map* mapsdata;
 	Room* roomsData;
+	int mapsize;
+	int roomsize;
 };
 
-Data::Data()
-{
-}
 
-Data::~Data()
-{
-}

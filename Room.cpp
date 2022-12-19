@@ -83,6 +83,7 @@ Room& Room:: operator=(Room& source) {
         m_South = delete_room(*m_South);
         m_South = copy_rooms(source.m_South);
 
+		return *this;
     }
 
 
@@ -203,7 +204,7 @@ Room& Room:: operator=(Room& source) {
 
 		visited = true;
 
-		Room* new_rooms = new Room(*this);
+		Room* new_rooms = this;
 
 		new_rooms->num_of_item = room->num_of_item;
 		new_rooms->num_of_monster = room->num_of_monster;
@@ -354,7 +355,7 @@ void Room:: add_item(Item& item){
                 return;
             }
             m_item[i] += item;
-            return
+			return;
         }
         new_item_list = new Item[num_of_item+1];
         for(int i = 0 ; i < num_of_item; i++){
@@ -368,3 +369,43 @@ void Room:: add_item(Item& item){
 
 }
 
+
+void Room::print() {
+
+	cout << m_name << endl;
+
+	for (int i = 0; i < num_of_item; i++)
+	{
+		cout << m_item[i].get_name() << endl;
+	}
+	for (int i = 0; i < num_of_monster; i++)
+	{
+		cout << m_monster[i].get_name() << endl;
+	}
+	cout << "in the north - " << (m_North == NULL?"No room":m_North->get_name()) << endl
+		<< "in the south - " << (m_South == NULL ? "No room" : m_South->get_name()) << endl
+		<< "in the east - " << (m_East == NULL ? "No room" : m_East->get_name()) << endl
+		<< "in the west - " << (m_West == NULL ? "No room" : m_West->get_name()) << endl;
+
+}
+
+
+ostream& operator <<(ostream& out, Room& room) {
+
+	room.print();
+	return out;
+
+ }
+
+Room::Room(string name) :
+	m_name(name),
+	m_item(NULL),
+	m_monster(NULL),
+	m_North(NULL),
+	m_South(NULL),
+	m_East(NULL),
+	m_West(NULL),
+	num_of_item(0),
+	num_of_monster(0)
+
+{};

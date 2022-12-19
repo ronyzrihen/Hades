@@ -16,7 +16,8 @@ class Room
 public:
 	Room();
 	Room(Room& source);
-	~Room();
+	Room(string name);
+	~Room(){};
 
 public:
 	Room& operator=(Room& source);
@@ -46,6 +47,8 @@ public:
     Room* get_West(){return m_West;};
     Room* get_East(){return m_East;};
     Room* get_South(){return m_South;};
+   friend ostream& operator <<(ostream&out,Room&room);
+   void print();
 
 private:
 	int num_of_item;
@@ -60,3 +63,4 @@ private:
 	bool visited = false;
 };
 
+std:: ostream& operator <<(ostream& out, Room& room);

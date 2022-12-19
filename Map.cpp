@@ -34,7 +34,7 @@ Map& Map::operator=(Map& source) {
         room_names[i] = source.room_names[i];
     }
 
-
+    return *this;
 }
 
 void Map::add_room(Room& room, direction dir ){
@@ -43,6 +43,16 @@ void Map::add_room(Room& room, direction dir ){
         cout << "Room already exist in this map\n";
         return;
     }
+
+    if (rooms == NULL) {
+
+        rooms = new Room(room);
+        curr_room = rooms;
+        numberofrooms++;
+        return;
+    }
+
+
     if (curr_room->check_room(room,dir) == false){
         cout << "Room was not added to map\n";
         return;
@@ -80,7 +90,7 @@ Map& Map:: operator+=(Map& source){
             curr_room = curr_room->get_South();
             curr_room->set_North(prev);
 
-
+            return *this;
 }
 
 Map Map:: operator+(Map& map){
