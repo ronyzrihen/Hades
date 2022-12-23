@@ -17,15 +17,24 @@ void Data:: add_map(Map& map) {
 
 
 void Data::add_room(Room& room) {
+    if(roomsize == 0){
+        roomsData = new Room(room);
+        roomsize++;
+        return;
+    }
 
 	Room* new_room = new Room[roomsize + 1];
-
 	for (int i = 0; i < roomsize; i++)
 	{
 		new_room[i] = roomsData[i];
 	}
+    new_room[roomsize] = room;
 	roomsize++;
-	delete[]roomsData;
+    for(int i =0 ; i < roomsize-1; i++){
+        if(&roomsData[i]!= NULL)
+            delete &roomsData[i];
+    }
+
 	roomsData = new_room;
 }
 
@@ -56,4 +65,9 @@ Map* Data::getmap(string name) {
 	return NULL;
 }
 
+void Data::print_rooms(){
+    for (int i = 0 ; i < roomsize; i++){
+        cout << roomsData[i] << endl;
+    }
+}
 

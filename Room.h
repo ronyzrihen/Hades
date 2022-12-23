@@ -17,7 +17,7 @@ public:
 	Room();
 	Room(Room& source);
 	Room(string name);
-	~Room(){};
+	~Room();
 
 public:
 	Room& operator=(Room& source);
@@ -26,19 +26,19 @@ public:
 	Room* find_room(string& room);
 	bool check_room(Room& room, direction direction);
 	bool check_room( direction direction);
-    Room* copy_rooms(Room*& room);
-	Room* delete_room(Room& room);
+    Room* copy_rooms(Room& room);
+	Room* delete_room();
     Room* move_room(direction direction);
 
-    void set_North(Room& room){*m_North = room;};
+    void set_North(Room& room){*m_North = room;}; //copies an existing room
     void set_West(Room& room){*m_West = room;};
     void set_East(Room& room){*m_East = room;};
-    void set_South(Room& room){*m_South = room;};
+    void copy_South(Room& room){*m_South = room;};
 
-    void set_North(Room*& room){m_North = room;};
-    void set_West(Room*& room){m_West = room;};
-    void set_East(Room*& room){m_East = room;};
-    void set_South(Room*& room){m_South = room;};
+    void set_North(Room* room){m_North = room;}; //connects an existing room
+    void set_West(Room* room){m_West = room;};
+    void set_East(Room* room){m_East = room;};
+    void set_South(Room* room){m_South = room;};
 
     void add_item(Item& item);
 
@@ -49,6 +49,7 @@ public:
     Room* get_South(){return m_South;};
    friend ostream& operator <<(ostream&out,Room&room);
    void print();
+    int room_count();
 
 private:
 	int num_of_item;

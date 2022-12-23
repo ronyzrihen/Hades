@@ -1,5 +1,7 @@
 #include "Game.h"
 
+using namespace std;
+
 
 void Game::upload_map(string name) {
 
@@ -17,3 +19,4 @@ void Game::upload_map(string name) {
 	currantmap = temp;
 
 }
+
