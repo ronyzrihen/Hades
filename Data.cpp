@@ -17,20 +17,21 @@ void Data:: add_map(Map& map) {
 
 
 void Data::add_room(Room& room) {
+
+        Room *copy = new Room(room);
     if(roomsize == 0){
-        roomsData = new Room(room);
+        *roomsData = new Room[roomsize+1];
+        *roomsData = copy;
         roomsize++;
         return;
     }
 
-	Room* new_room = new Room[roomsize + 1];
-	for (int i = 0; i < roomsize; i++)
-	{
-		new_room[i] = roomsData[i];
-	}
-    new_room[roomsize] = room;
+	Room** new_room ;
+    memcpy(new_room,roomsData,(roomsize+1)*sizeof(Room*));
+    new_room[roomsize+1] = copy;
 	roomsize++;
     for(int i =0 ; i < roomsize-1; i++){
+
         if(&roomsData[i]!= NULL)
             delete &roomsData[i];
     }
@@ -45,9 +46,9 @@ Room* Data:: getroom(string name) {
 
 	for (int i = 0; i < roomsize; i++)
 	{
-		if (roomsData[i].get_name() == name)
+		if (roomsData[i]->get_name() == name)
 		{
-			return &roomsData[i];
+			return roomsData[i];
 		}
 	}
 

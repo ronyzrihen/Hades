@@ -82,7 +82,7 @@ Room& Room:: operator=(Room& source) {
         num_of_monster = source.num_of_monster;
         visited = false;
 
-
+    if(m_North != NULL);
     delete m_North;
     if(m_East != NULL)
         delete m_East;
@@ -441,9 +441,13 @@ int Room:: room_count(){
 
 
 Room::~Room() {
+
+cout<< "||IM HERE||\n";
+cout << m_name << endl;
     delete[] m_item;
     delete[] m_monster;
 delete_room();
+cout << "||IM OUT||\n";
 }
 
 

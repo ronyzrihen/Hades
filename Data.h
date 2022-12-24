@@ -22,7 +22,7 @@ public:
     void print_rooms();
 private:
 	Map* mapsdata;
-	Room* roomsData;
+	Room** roomsData;
 	int mapsize;
 	int roomsize;
 };
