@@ -13,7 +13,8 @@ typedef enum {
 class Item
 {
 public:
-	Item();
+    Item();
+	Item(const string& name, Rarity rareness):m_name(name), m_rarity(rareness){};
 	Item(Item& source);
 	~Item() { };
 

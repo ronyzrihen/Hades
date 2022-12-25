@@ -33,15 +33,16 @@ m_West(NULL)
     source.visited = true;
 
     if(source.m_North != NULL)
-        m_North = source.m_North->copy_rooms(*(source.m_North));
+        m_North = source.m_North->copy_rooms(this);
     if(source.m_South != NULL)
-        m_South = source.m_South->copy_rooms(*(source.m_South));
+        m_South = source.m_South->copy_rooms(this);
     if(source.m_East!= NULL)
-        m_East = source.m_East->copy_rooms(*(source.m_East));
+        m_East = source.m_East->copy_rooms(this);
     if(source.m_West != NULL)
-        m_West = source.m_West->copy_rooms(*(source.m_West));
+        m_West = source.m_West->copy_rooms(this);
 source.visited = false;
 }
+
 
 Room& Room:: operator=(Room& source) {
 
@@ -94,7 +95,39 @@ Room& Room:: operator=(Room& source) {
 
 		return *this;
     }
+bool Room:: Add_Room(Room* source){
 
+    if(m_name == source->m_name||(m_North != NULL && m_North->m_name==source->m_name) || (m_East != NULL && m_East->m_name==source->m_name)||(m_South != NULL && m_South->m_name==source->m_name)||(m_West != NULL && m_West->m_name==source->m_name))
+    {
+        cout << "Room already exist!\n";
+        return false;
+    }
+
+    if(m_North == NULL) {
+        m_North = new Room(*source);
+        m_North->m_South = this;
+        return true;
+    }
+    if(m_East == NULL){
+
+        m_East = new Room(*source);
+        m_East->m_West = this;
+        return true;
+    }
+    if(m_South == NULL){
+
+        m_South = new Room(*source);
+        m_South->m_North = this;
+        return true;
+    }
+    if(m_West == NULL){
+        m_West = new Room(*source);
+        m_West->m_East = this;
+        return true;
+    }
+    cout << "This room is surrounded!\nRoom was not added\n";
+    return false;
+}
 
 	bool Room::Add_Room(Room * source, direction direction){
 
@@ -203,41 +236,44 @@ Room& Room:: operator=(Room& source) {
 
 
 
-	Room* Room:: copy_rooms(Room& room) {
+	Room* Room:: copy_rooms(Room * prev) {
 
 		if (this == NULL )
 			return NULL;
 
 		if (visited == true)
-			return this;
+			return prev;
 
         Room* new_room = new Room;
 
-        new_room->m_name = room.m_name;
-        new_room->num_of_item = room.num_of_item;
-        new_room->num_of_monster = room.num_of_monster;
+        new_room->m_name = m_name;
+        new_room->num_of_item = num_of_item;
+        new_room->num_of_monster = num_of_monster;
 
-		for (int i = 0; i < room.num_of_item; i++) {
-            new_room->m_item[i] = room.m_item[i];
+		for (int i = 0; i < num_of_item; i++) {
+            new_room->m_item[i] = m_item[i];
 		}
-		for (int i = 0; i < room.num_of_monster; i++) {
-            new_room->m_monster[i] = room.m_monster[i];
+		for (int i = 0; i < num_of_monster; i++) {
+            new_room->m_monster[i] = m_monster[i];
 		}
 		visited = true;
 
+        if(m_West!=NULL && m_West->visited){new_room->m_West = m_West->copy_rooms(prev);}
+		else{new_room->m_West = m_West->copy_rooms(new_room);}
 
-		m_West = room.m_West->copy_rooms(*room.m_West);
+        if(m_East!=NULL &&m_East->visited){new_room->m_East = m_East->copy_rooms(prev);}
+        else{new_room->m_East =m_East->copy_rooms(new_room);}
 
-		m_East = room.m_East->copy_rooms(*room.m_East);
+        if(m_North!=NULL && m_North->visited){new_room->m_North = m_North->copy_rooms(prev);}
+        else{new_room->m_North = m_North->copy_rooms(new_room);}
 
-		m_North = room.m_North->copy_rooms(*room.m_North);
-
-		m_South = room.m_South->copy_rooms(*room.m_South);
+        if(m_South!=NULL && m_South->visited){new_room->m_South = m_South->copy_rooms(prev);}
+        else{new_room->m_South = m_South->copy_rooms(new_room);}
 
 
 		visited = false;
 
-		return this;
+		return new_room;
 
 
 

@@ -12,7 +12,6 @@ m_rarity(common)
 }
 
 
-
 Item::Item(Item& source):
 m_name(source.m_name),
 m_rarity(source.m_rarity)

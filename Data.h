@@ -13,7 +13,7 @@ public:
 	~Data(){};
 
 public:
-	void add_map(Map& map);
+	void add_map(const Map& map);
 	void add_room(Room& room);
 	Room* getroom(string name);
 	Map* getmap(string name);

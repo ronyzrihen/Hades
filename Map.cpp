@@ -10,31 +10,36 @@ Map::Map()
 {}
 
 
-Map::Map(Map& source)
+Map::Map(const Map& source)
 	:
 	name(source.name),
-	rooms(new Room(*source.rooms)),
-    curr_room(rooms),
 	numberofrooms(source.numberofrooms)
 
-{}
+{
+    if(source.rooms == NULL)
+        rooms = NULL;
+    else{rooms = new Room(*source.rooms);}
+    curr_room = rooms;
+}
 
 Map::~Map() {
 	delete rooms; //todo dont know
 }
 
-Map& Map::operator=(Map& source) {
+
+Map& Map::operator=(const Map& source) {
 	if (this == &source)
 		return *this;
 
-	name = source.name;
+
 	numberofrooms = source.numberofrooms;
     delete rooms;
-    rooms = new Room(*(source.rooms));
+    rooms = new Room(*source.rooms);
     curr_room = rooms;
 
     return *this;
 }
+
 
 void Map::add_room(Room& room, direction dir ){
 
@@ -66,6 +71,13 @@ void Map::add_room(Room& room, direction dir ){
 }
 
 Map& Map:: operator+=(Map& source){
+  if (rooms == NULL){
+
+      numberofrooms = room_count();
+      rooms = new Room(*(source.rooms));
+      curr_room = rooms;
+      return *this;
+  }
     Room* prev= NULL;
     curr_room = rooms;
     source.curr_room = source.rooms;

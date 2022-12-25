@@ -1,7 +1,7 @@
 #include "Data.h"
 
 
-void Data:: add_map(Map& map) {
+void Data:: add_map(const Map& map) {
 
 	Map* copy = new Map(map);
 	if (mapsize == 0) {
