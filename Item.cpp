@@ -5,7 +5,7 @@
 
 
 Item::Item():
-m_name(NULL),
+m_name(" "),
 m_rarity(common)
 {
 

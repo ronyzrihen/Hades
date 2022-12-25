@@ -20,8 +20,9 @@ public:
     int get_room_size(){return roomsize;};
     int get_map_size(){return mapsize;};
     void print_rooms();
+	void print_map();
 private:
-	Map* mapsdata;
+	Map** mapsdata;
 	Room** roomsData;
 	int mapsize;
 	int roomsize;

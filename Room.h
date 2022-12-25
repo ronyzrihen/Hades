@@ -33,14 +33,16 @@ public:
     void set_North(Room& room){*m_North = room;}; //copies an existing room
     void set_West(Room& room){*m_West = room;};
     void set_East(Room& room){*m_East = room;};
-    void copy_South(Room& room){*m_South = room;};
+    void copy_South(Room& room){m_South = new Room(room); };
 
     void set_North(Room* room){m_North = room;}; //connects an existing room
     void set_West(Room* room){m_West = room;};
     void set_East(Room* room){m_East = room;};
     void set_South(Room* room){m_South = room;};
+	
 
     void add_item(Item& item);
+	void print_rooms();
 
 
     Room* get_North(){return m_North;};

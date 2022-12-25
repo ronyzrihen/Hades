@@ -82,7 +82,7 @@ Room& Room:: operator=(Room& source) {
         num_of_monster = source.num_of_monster;
         visited = false;
 
-    if(m_North != NULL);
+    if(m_North != NULL)
     delete m_North;
     if(m_East != NULL)
         delete m_East;
@@ -166,7 +166,6 @@ Room& Room:: operator=(Room& source) {
 
 		if (visited == true)
 			return NULL;
-        cout << m_name << endl;
 		if (m_name == room)
 			return this;
 		visited = true;
@@ -195,6 +194,7 @@ Room& Room:: operator=(Room& source) {
 
 		if (West != NULL)
 			return West;
+        cout << m_name << endl;
 
 		return NULL;
 	}
@@ -362,7 +362,7 @@ void Room:: add_item(Item& item){
                 for(int i = 0 ; i < num_of_item ; i++){
                     new_item_list[i] = m_item[i];
                 }
-                new_item_list[num_of_item+1] = item;
+                new_item_list[num_of_item] = item;
                 num_of_item++;
                 delete [] m_item;
                 m_item = new_item_list;
@@ -378,7 +378,7 @@ void Room:: add_item(Item& item){
         for(int i = 0 ; i < num_of_item; i++){
             new_item_list[i] = m_item[i];
         }
-        new_item_list[num_of_item+1] = item;
+        new_item_list[num_of_item] = item;
         num_of_item++;
         return;
     }
@@ -442,12 +442,26 @@ int Room:: room_count(){
 
 Room::~Room() {
 
-cout<< "||IM HERE||\n";
-cout << m_name << endl;
     delete[] m_item;
     delete[] m_monster;
 delete_room();
-cout << "||IM OUT||\n";
+
 }
 
 
+void Room::print_rooms() {
+    if (this == NULL)
+        return;
+    if (visited) {
+
+        return;
+    }
+    visited = true;
+    m_North->print_rooms();
+    m_West->print_rooms();
+    m_South->print_rooms();
+    m_East->print_rooms();
+    
+    cout << m_name << endl;
+    visited = false;
+}

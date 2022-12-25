@@ -9,6 +9,7 @@ class Map
 public:
     Map();
 	Map(Map& source);
+	Map(string name):name(name),rooms(NULL),curr_room(NULL),numberofrooms(0) {};
 	~Map();
 
 public:
@@ -19,6 +20,7 @@ public:
 	string get_name() { return name; };
 	Room* get_room(string name) { return rooms->find_room(name); };
     int room_count(){return rooms->room_count();};
+	void print_rooms() { rooms->print_rooms(); };
 private:
 	std::string name;
     int numberofrooms;

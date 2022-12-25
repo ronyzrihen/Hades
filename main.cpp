@@ -26,22 +26,47 @@ int main() {
   game.add_room(room8);
   game.add_room(room9);
     game.add_room(room10);
-    cout << game.get_data_size() << endl;
-    game.print_rooms_data();
+    //cout << game.get_data_size() << endl;
+ //   game.print_rooms_data();
 
   //  stupid.print_rooms_data();
 
-//    room1.set_West(&room2);
-//    room2.set_East(&room1);
-//    room2.set_North(&room3);
-//    room3.set_South(&room2);
+   room1.set_West(&room2);
+   room2.set_East(&room1);
+   room2.set_North(&room3);
+   room3.set_South(&room2);
+
+   room6.set_North(&room7);
+   room7.set_South(&room6);
+   room8.set_East(&room6);
+   room6.set_West(&room8);
+
+  
 
 
-	cout << room1;
 
-	Map map;
-	map.add_room(room1,north);
+	
 
-	map.get_room("room1.get_name()");
+	Map map1("ofek"), map2("dardale"), map3("zibi");
+	
+    map1.add_room(room1,north);
+    map2.add_room(room5, west);
+    map3.add_room(room6, east);
+    map1.print_rooms();
+    game.add_map(map1);
+    game.add_map(map2);
+    game.add_map(map3);
+	map1.get_room("null");
+    game.upload_map("ofek");
+   
+    cout << game.print_current();
+    
+    game.get_current() += ( * (game.get_map("zibi")) + *(game.get_map("dardale")));//lo tofes.
+    cout << game.get_num_of_rooms()<< endl;
+
+//    game.print_map_data();
+
+
+
 return 0;
 }
