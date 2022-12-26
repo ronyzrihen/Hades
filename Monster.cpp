@@ -1,8 +1,14 @@
+
+/*
+Ofek Eliyahu 207753120
+Rony Zrihen 318917549
+*/
+
 #include "Monster.h"
 
 Monster::Monster()
 	:
-	m_name(NULL),
+	m_name(" "),
 	m_level(0)
 {
 }
@@ -21,7 +27,6 @@ Monster& Monster:: operator=(Monster& source) {
 	if (this == &source)
 		return *this;
 
-	delete[] m_name;
 	m_name = source.m_name;
 	m_level = source.m_level;
 	return *this;
@@ -30,7 +35,7 @@ Monster& Monster:: operator=(Monster& source) {
 
 Monster& Monster:: operator+=(Monster& source) {
 
-	if (strcmp(m_name, source.m_name) == 0) {
+	if (m_name == source.m_name) {
 		if (m_level + source.m_level > 5)
 			m_level = 5;
 		else

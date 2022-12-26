@@ -13,14 +13,21 @@ public:
 	~Data(){};
 
 public:
+
+	//Adders
 	void add_map(const Map& map);
 	void add_room(Room& room);
+	
+	//Getters
 	Room* getroom(string name);
 	Map* getmap(string name);
     int get_room_size(){return roomsize;};
     int get_map_size(){return mapsize;};
-    void print_rooms();
+   
+	//Printing unctions
+	void print_rooms();
 	void print_map();
+
 private:
 	Map** mapsdata;
 	Room** roomsData;

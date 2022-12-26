@@ -1,3 +1,9 @@
+
+/*
+Ofek Eliyahu 207753120
+Rony Zrihen 318917549
+*/
+
 #include "Data.h"
 
 
@@ -77,7 +83,7 @@ Map* Data::getmap(string name) {
 
 void Data::print_rooms(){
     for (int i = 0 ; i < roomsize; i++){
-        cout << roomsData[i] << endl;
+        cout <<i <<".   " <<  *(roomsData[i]) << endl;
     }
 }
 

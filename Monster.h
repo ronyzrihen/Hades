@@ -1,7 +1,7 @@
 #pragma once
 #include <iostream>
 #include <string>
-
+using namespace std;
 
 
 
@@ -9,16 +9,25 @@ class Monster
 {
 public:
 	Monster();
+	Monster(const string& name, int level):m_name(name),m_level(level){};
 	Monster(Monster& source);
-	~Monster() { delete[] m_name; };
+	~Monster() {  };
 public:
+	//Operators
 	Monster& operator=(Monster& source);
 	Monster& operator+=(Monster& monster);
 	Monster operator + (Monster& monster);
 	Monster& operator ++();
-	char* get_name() { return m_name; };
+
+	//Getters
+	string& get_name() { return m_name; };
+	int get_level() { return m_level; };
+
+	//A setter
+	void set_level(int level) { m_level = level; };
+
 private:
-	char* m_name;
+	string m_name;
 	int m_level;
 };
 

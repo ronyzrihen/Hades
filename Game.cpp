@@ -1,3 +1,9 @@
+
+/*
+Ofek Eliyahu 207753120
+Rony Zrihen 318917549
+*/
+
 #include "Game.h"
 
 using namespace std;

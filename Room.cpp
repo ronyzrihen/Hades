@@ -1,3 +1,9 @@
+
+/*
+Ofek Eliyahu 207753120
+Rony Zrihen 318917549
+*/
+
 #include "Room.h"
 using namespace std;
 
@@ -6,26 +12,41 @@ Room::Room()
 	num_of_item(0),
 	num_of_monster(0),
 	m_name(" "),
-	m_item(NULL),
-	m_monster(NULL),
 	m_North(NULL),
 	m_South(NULL),
 	m_East(NULL),
-	m_West(NULL)
+	m_West(NULL),
+    m_item(new Item* ),
+    m_monster(new Monster*)
 {}
 
 Room::Room(Room& source) :
 m_North(NULL),
 m_South(NULL),
 m_East(NULL),
-m_West(NULL)
+m_West(NULL),
+num_of_item(source.num_of_item),
+num_of_monster(source.num_of_monster)
 
 {
+    if (num_of_item == 0)
+        m_item = new Item*;
+    else
+    {
+    m_item = new Item * [num_of_item];
+    }
+    if (num_of_monster == 0)
+        m_monster = new Monster*;
+    else
+    {
+        m_monster=new Monster*[num_of_monster];
+    }
+
 	for (int i = 0; i < num_of_item; i++) {
-		m_item[i] = source.m_item[i];
+		m_item[i] = new Item(*source.m_item[i]);
 	}
 	for (int i = 0; i < num_of_monster; i++) {
-		m_monster[i] = source.m_monster[i];
+		m_monster[i] =new Monster( *source.m_monster[i]);
 	}
     m_name = source.m_name;
     num_of_item = source.num_of_item;
@@ -57,7 +78,7 @@ Room& Room:: operator=(Room& source) {
 	else {
         delete[]m_item;
 
-        m_item = new Item[source.num_of_item];
+        m_item = new Item*[source.num_of_item];
         for (int i = 0; i < source.num_of_item; i++) {
             m_item[i] = source.m_item[i];
         }
@@ -388,36 +409,49 @@ Room* Room:: move_room(direction direction){
                 }
 
 void Room:: add_item(Item& item){
-    Item* new_item_list = NULL;
-    for(int i = 0 ; i <  num_of_item ; i++){
-        if (m_item[i].get_name() == item.get_name()){
-            if(m_item[i].get_rarity() + (item).get_rarity() > legendary){
-                m_item[i] += item;
-
-                new_item_list = new Item[num_of_item+1];
-                for(int i = 0 ; i < num_of_item ; i++){
-                    new_item_list[i] = m_item[i];
-                }
-                new_item_list[num_of_item] = item;
-                num_of_item++;
-                delete [] m_item;
-                m_item = new_item_list;
-
-                m_item[num_of_item].set_rarity(common);
-
-                return;
-            }
-            m_item[i] += item;
-			return;
-        }
-        new_item_list = new Item[num_of_item+1];
-        for(int i = 0 ; i < num_of_item; i++){
-            new_item_list[i] = m_item[i];
-        }
-        new_item_list[num_of_item] = item;
+    Item** new_item_list = NULL;
+    if (num_of_item == 0) {
+        m_item = new Item*;
+        m_item[0] = new Item(item);
         num_of_item++;
         return;
     }
+    for(int i = 0 ; i <  num_of_item ; i++){
+        if (m_item[i]->get_name() == item.get_name()){
+            if(m_item[i]->get_rarity() + (item).get_rarity() > legendary){
+                *(m_item[i]) += item;
+
+                new_item_list = new Item*[num_of_item+1];
+                memcpy(new_item_list, m_item, num_of_item*sizeof (Item*));
+              /*  for(int i = 0 ; i < num_of_item ; i++){
+                    new_item_list[i] = m_item[i];
+                }*/
+                new_item_list[num_of_item] =new Item( item);
+               
+               delete  m_item;
+
+                m_item = new_item_list;
+
+                m_item[num_of_item]->set_rarity(common);
+                num_of_item++;
+
+                return;
+            }
+           *( m_item[i]) += item;
+			return;
+        }
+    }
+        new_item_list = new Item*[num_of_item+1];
+        for(int i = 0 ; i < num_of_item; i++){
+            new_item_list[i] = m_item[i];
+        }
+        new_item_list[num_of_item] =new Item( item);
+      
+      
+        delete m_item;
+        m_item = new_item_list;
+        num_of_item++;
+        return;
 
 
 }
@@ -426,14 +460,19 @@ void Room:: add_item(Item& item){
 void Room::print() {
 
 	cout << m_name << endl;
+	cout << m_name<<"'s Items:\n"
+                  << "--------"<<endl;
 
 	for (int i = 0; i < num_of_item; i++)
 	{
-		cout << m_item[i].get_name() << endl;
+		cout << i + 1 << ".    " << m_item[i]->get_name() <<"-" << m_item[i]->get_rarity() << endl;
 	}
+
+    cout << m_name << "'s Monsters:\n"
+                   << "------------" << endl;
 	for (int i = 0; i < num_of_monster; i++)
 	{
-		cout << m_monster[i].get_name() << endl;
+		cout <<i+1<< ".    "<< m_monster[i]->get_name() << "-" << m_monster[i]->get_level() << endl;
 	}
 	cout << "in the north - " << (m_North == NULL?"No room":m_North->get_name()) << endl
 		<< "in the south - " << (m_South == NULL ? "No room" : m_South->get_name()) << endl
@@ -478,8 +517,24 @@ int Room:: room_count(){
 
 Room::~Room() {
 
-    delete[] m_item;
-    delete[] m_monster;
+    if (m_item != NULL) {
+
+        for (int i = 0; i < num_of_item; i++)
+        {
+            delete m_item[i];
+        }
+        delete m_item;
+        m_item = NULL;
+
+    }
+    if (m_monster != NULL) {
+        for (int i = 0; i < num_of_monster; i++)
+        {
+            delete m_monster[i];
+        }
+         delete m_monster;
+         m_monster = NULL;
+    }
 delete_room();
 
 }
@@ -498,6 +553,55 @@ void Room::print_rooms() {
     m_South->print_rooms();
     m_East->print_rooms();
     
-    cout << m_name << endl;
+    cout << m_name<< endl;
+ 
     visited = false;
+}
+
+
+void Room::add_monster(Monster& monster) {
+
+   Monster** new_monster_list=NULL;
+
+   if (num_of_monster == 0) {
+       m_monster = new Monster*;
+       m_monster[0] = new Monster(monster);
+       num_of_monster++;
+       return;
+   }
+
+   for (int i = 0; i < num_of_monster; i++)
+   {
+       if (m_monster[i]->get_name() == monster.get_name()) {
+           if (m_monster[i]->get_level() + monster.get_level() >= 5) {
+               *(m_monster[i]) += monster;
+               new_monster_list = new Monster*[num_of_monster + 1];
+               for (int i = 0; i < num_of_monster; i++)
+               {
+                   new_monster_list[i] = m_monster[i];
+               }
+               new_monster_list[num_of_monster] =new Monster(monster);
+               delete m_monster;
+               m_monster = new_monster_list;
+               m_monster[num_of_monster]->set_level(0);
+               num_of_monster++;
+               return;
+
+           }
+           *(m_monster[i]) += monster;
+           return;
+       }
+
+   }
+     new_monster_list = new Monster*[num_of_monster + 1];
+     for (int i = 0; i < num_of_monster; i++)
+     {
+         new_monster_list[i] = m_monster[i];
+     }
+     new_monster_list[num_of_monster] = new Monster(monster);
+     delete m_monster;
+     m_monster = new_monster_list;
+     num_of_monster++;
+     return;
+
 }
